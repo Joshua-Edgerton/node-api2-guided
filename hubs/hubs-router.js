@@ -97,6 +97,22 @@ router.put('/:id', (req, res) => {
   });
 });
 
+router.get("/:id/messages", (req, res) => {
+    Hubs.findHubMessages(req.params.id).then(messages => {
+        res.status(200).json(messages);
+    }).catch(error => {
+        console.log(error);
+    })
+})
+
+router.post("/:id/messages", (req, res) => {
+    Hubs.addMessage(req.body).then(messages => {
+        res.status(200).json(messages);
+    }).catch(error => {
+        console.log(error);
+    })
+})
+
 // add an endpoint that returns all the messages for a hub
 // add an endpoint for adding new message to a hub
 
