@@ -1,21 +1,20 @@
 const express = require('express');
+const Hubs = require('./hubs-model');
 
-const hubsRouter = require('../hubs/hubs-router.js');
+// make sure to invoke and use Uppercase 
+const router = express.Router(); 
 
-const server = express();
 
-server.use(express.json());
+router.use(express.json());
 
-server.use('/api/hubs', hubsRouter);
+// router.get('/', (req, res) => {
+//   res.send(`
+//     <h2>Lambda Hubs API</h>
+//     <p>Welcome to the Lambda Hubs API</p>
+//   `);
+// });
 
-server.get('/', (req, res) => {
-  res.send(`
-    <h2>Lambda Hubs API</h>
-    <p>Welcome to the Lambda Hubs API</p>
-  `);
-});
-
-server.get('/api/hubs', (req, res) => {
+router.get('/', (req, res) => {
   Hubs.find(req.query)
   .then(hubs => {
     res.status(200).json(hubs);
@@ -29,7 +28,7 @@ server.get('/api/hubs', (req, res) => {
   });
 });
 
-server.get('/api/hubs/:id', (req, res) => {
+router.get('/:id', (req, res) => {
   Hubs.findById(req.params.id)
   .then(hub => {
     if (hub) {
@@ -47,7 +46,7 @@ server.get('/api/hubs/:id', (req, res) => {
   });
 });
 
-server.post('/api/hubs', (req, res) => {
+router.post('/', (req, res) => {
   Hubs.add(req.body)
   .then(hub => {
     res.status(201).json(hub);
@@ -61,7 +60,7 @@ server.post('/api/hubs', (req, res) => {
   });
 });
 
-server.delete('/api/hubs/:id', (req, res) => {
+router.delete('/:id', (req, res) => {
   Hubs.remove(req.params.id)
   .then(count => {
     if (count > 0) {
@@ -79,7 +78,7 @@ server.delete('/api/hubs/:id', (req, res) => {
   });
 });
 
-server.put('/api/hubs/:id', (req, res) => {
+router.put('/:id', (req, res) => {
   const changes = req.body;
   Hubs.update(req.params.id, changes)
   .then(hub => {
@@ -101,4 +100,4 @@ server.put('/api/hubs/:id', (req, res) => {
 // add an endpoint that returns all the messages for a hub
 // add an endpoint for adding new message to a hub
 
-module.exports = server;
+module.exports = router;
